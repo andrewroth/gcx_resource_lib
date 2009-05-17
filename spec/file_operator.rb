@@ -4,7 +4,7 @@ describe 'FileOperator' do
 
   before do
     auth = Auth.new('studentseven7@gmail.com', 'student7!')
-    @fo = FileOperator.new(auth.agent)
+    @fo = FileOperator.new(auth.agent, :staging)
     create_test_file
   end
 
@@ -13,7 +13,7 @@ describe 'FileOperator' do
   end
 
   def create_test_file
-    f = File.open('test.txt')
+    f = File.open('test.txt', 'w')
     f.puts('test gcx upload')
     f.close
   end
@@ -27,20 +27,22 @@ describe 'FileOperator' do
     # https://stage.mygcx.org/AndrewTest/screen/resourceCenter
 
     lambda {
-      fo.list :community => 'AndrewTest'
+      @fo.list :community => 'AndrewTest'
     }.should_not raise_error
   end
 
   it "should upload a file" do
-    fo.upload :community => 'AndrewTest',
+    @fo.upload :community => 'AndrewTest',
       :file => File.open('test.txt')
-    fo.list(:community => 'AndrewTest').find { |f|
+    file = fo.list(:community => 'AndrewTest').find { |f|
       f.title == 'test.txt'
-    }.should_not be_nil
+    }
+    file.should_not be_nil
+    file.destroy!
   end
 
   it "should get details on a file" do
-    fo.upload :community => 'AndrewTest',
+    @fo.upload :community => 'AndrewTest',
       :file => File.open('test.txt'),
       :title => 'title',
       :author => 'author',
@@ -48,6 +50,15 @@ describe 'FileOperator' do
       :language => 'language',
       :summary => 'summary',
       :permissions => 'permissions'
-    }
+
+    file = @fo.list(:community => 'AndrewTest').find{ |f| f.title == 'title' }
+
+    file.title.should == 'title'
+    file.author.should == 'author'
+    file.owner.should == 'owner'
+    file.language.should == 'language'
+    file.summary.should == 'summary'
+
+    file.destroy!
   end
 end
