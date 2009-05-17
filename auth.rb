@@ -1,10 +1,12 @@
 class Auth
   attr_reader :username
   attr_reader :password
+  attr_reader :agent
 
   def initialize(username, password)
     @username = username
     @password = password
+    @agent = WWW::Mechanize.new
 
     @authenticated = connect!
     throw "Invalid username or password" unless authenticated?
@@ -23,8 +25,7 @@ class Auth
       :service => '' 
     }
 
-    cas_url = 'https://signin.mygcx.org/cas/login'
-    agent = WWW::Mechanize.new
+    cas_url = GcxResource::LOGIN_URL
     page = agent.post(cas_url, form_params)
     result_query = page.uri.query
 
