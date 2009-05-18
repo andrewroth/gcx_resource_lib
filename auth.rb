@@ -25,7 +25,7 @@ class Auth
       :service => '' 
     }
 
-    cas_url = GcxResource::LOGIN_URL
+    cas_url = GcxResourceCenter::LOGIN_URL
     page = agent.post(cas_url, form_params)
     result_query = page.uri.query
 

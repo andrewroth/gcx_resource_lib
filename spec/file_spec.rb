@@ -1,6 +1,6 @@
 require "#{File.dirname(__FILE__)}/../init"
 
-describe GcxResource::File do
+describe GcxResourceCenter::File do
   before do
     @parent = mock('parent', :id => 3)
     @root = Hpricot(%|
@@ -13,19 +13,19 @@ type="application/octet-stream" uploaderGUID="guid"/>
   it "should check that parent's id and folderid match passing case" do
     @parent.should_receive(:id).and_return(3)
     lambda {
-      @file = GcxResource::File.new(@parent, @root)
+      @file = GcxResourceCenter::File.new(@parent, @root)
     }.should_not raise_error
   end
 
   it "should check that parent's id and folderid match failing case" do
     @parent.should_receive(:id).and_return(4)
     lambda {
-      @file = GcxResource::File.new(@parent, @root)
+      @file = GcxResourceCenter::File.new(@parent, @root)
     }.should raise_error
   end
 
   it "should store and extract attributes properly" do
-    @file = GcxResource::File.new(@parent, @root)
+    @file = GcxResourceCenter::File.new(@parent, @root)
 
     @file.community.should == 'AndrewTest'
     @file.name.should == 'name'

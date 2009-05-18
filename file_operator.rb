@@ -15,15 +15,15 @@ class FileOperator
   protected
 
   def parse_list_response(xml)
-    [ ((xml/'files').first.children || []).collect{ |node| GcxResource::File.new(nil, node) }, 
-      ((xml/'folders').first.children || []).collect{ |node| GcxResource::Folder.new(nil, node) } ]
+    [ ((xml/'files').first.children || []).collect{ |node| GcxResourceCenter::File.new(nil, node) }, 
+      ((xml/'folders').first.children || []).collect{ |node| GcxResourceCenter::Folder.new(nil, node) } ]
   end
 
   def construct_url(mode, resource)
     if mode == :production
-      base = GcxResource::PRODUCTION_BASE
+      base = GcxResourceCenter::PRODUCTION_BASE
     elsif mode == :staging
-      base = GcxResource::STAGING_BASE
+      base = GcxResourceCenter::STAGING_BASE
     else
       throw 'construct_url requires a mode, one of :production or :staging'
     end

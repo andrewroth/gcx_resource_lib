@@ -1,4 +1,4 @@
-module GcxResource
+module GcxResourceCenter
   class Folder
     attr_reader :id, :parent, :label, :community
 

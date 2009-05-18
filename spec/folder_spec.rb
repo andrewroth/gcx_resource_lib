@@ -1,6 +1,6 @@
 require "#{File.dirname(__FILE__)}/../init"
 
-describe GcxResource::Folder do
+describe GcxResourceCenter::Folder do
   before do
     @parent = mock('parent', :id => 3)
     @root = Hpricot(%|
@@ -13,7 +13,7 @@ describe GcxResource::Folder do
   end
 
   it "should store and extract attributes properly" do
-    @folder = GcxResource::Folder.new(@parent, @root, @fo)
+    @folder = GcxResourceCenter::Folder.new(@parent, @root, @fo)
 
     @folder.parent.should == @parent
     @folder.id.should == 6
@@ -21,7 +21,7 @@ describe GcxResource::Folder do
   end
 
   it "should get a list of all files when requested" do
-    @folder = GcxResource::Folder.new(@parent, @root, @fo)
+    @folder = GcxResourceCenter::Folder.new(@parent, @root, @fo)
     @fo.should_receive(:list).with(:community => 'AndrewTest',
                                    :id => @folder.id)
     @folder.files 
