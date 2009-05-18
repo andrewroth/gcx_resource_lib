@@ -4,7 +4,8 @@ describe 'FileOperator' do
 
   before do
     auth = Auth.new('studentseven7@gmail.com', 'student7!')
-    @fo = FileOperator.new(auth.agent, :staging)
+    @agent = auth.agent
+    @fo = FileOperator.new(@agent, :staging)
     create_test_file
   end
 
@@ -60,5 +61,14 @@ describe 'FileOperator' do
     file.summary.should == 'summary'
 
     file.destroy!
+  end
+
+  it "should correctly list a folder" do
+    @agent.should_receive(:get).and_return(mock('page', :body => %|
+<?xml version="1.0" encoding="UTF-8"?><resourceCenter><files><node community="AndrewTest2" filename="test2.jpg" folderid="9" id="2" label="PublicHome_topgraphic.jpg" size="39608" type="image/jpeg" uploaderGUID="3A3168E8-5E53-5177-3835-CDE816BDB897"/><node community="AndrewTest" filename="PublicHome_topgraphic.jpg" folderid="9" id="1" label="PublicHome_topgraphic.jpg" size="39608" type="image/jpeg" uploaderGUID="3A3168E8-5E53-5177-3835-CDE816BDB897"/></files><folders community="AndrewTest" id="9" label=""></folders></resourceCenter>
+|))
+    files, folders = @fo.list(:community => 'AndrewTest')
+    files.length.should == 2
+    folders.length.should == 0
   end
 end

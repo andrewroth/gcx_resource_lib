@@ -9,14 +9,14 @@ class FileOperator
     url = "#{params[:community]}/module/resourceCenter/get_files"
     url += "?id=#{params[:id]}" if params[:id]
     page = @agent.get construct_url(@mode, url)
-    page_xml = Hpricot(page.body)
-    parse_list_response page_xml.inspect
+    parse_list_response Hpricot(page.body)
   end
 
   protected
 
   def parse_list_response(xml)
-
+    [ ((xml/'files').first.children || []).collect{ |node| GcxResource::File.new(nil, node) }, 
+      ((xml/'folders').first.children || []).collect{ |node| GcxResource::Folder.new(nil, node) } ]
   end
 
   def construct_url(mode, resource)
