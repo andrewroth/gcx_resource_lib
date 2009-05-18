@@ -8,10 +8,14 @@ class FileOperator
     # https://stage.mygcx.org/AndrewTest/module/resourceCenter/get_files?sys_ts=1242592593314
     page = @agent.get construct_url(@mode, "#{params[:community]}/module/resourceCenter/get_files")
     page_xml = Hpricot(page.body)
-    puts page_xml.inspect
+    parse_list_response page_xml.inspect
   end
 
   protected
+
+  def parse_list_response(xml)
+
+  end
 
   def construct_url(mode, resource)
     if mode == :production
