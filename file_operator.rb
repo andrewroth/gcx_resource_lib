@@ -6,7 +6,9 @@ class FileOperator
 
   def list(params)
     # https://stage.mygcx.org/AndrewTest/module/resourceCenter/get_files?sys_ts=1242592593314
-    page = @agent.get construct_url(@mode, "#{params[:community]}/module/resourceCenter/get_files")
+    url = "#{params[:community]}/module/resourceCenter/get_files"
+    url += "?id=#{params[:id]}" if params[:id]
+    page = @agent.get construct_url(@mode, url)
     page_xml = Hpricot(page.body)
     parse_list_response page_xml.inspect
   end
