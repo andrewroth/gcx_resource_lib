@@ -1,4 +1,4 @@
-module GcxResourceCenter
+class Gcx::ResourceCenter
   class File
     attr_reader :parent
     attr_reader :id, :community, :name, :label, :size, :content_type, :uploader_guid
