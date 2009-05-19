@@ -4,7 +4,6 @@ require 'mechanize'
 
 require 'hpricot'
 require 'auth'
-require 'file_operator'
-require 'gcx_resource'
+require 'gcx_resource_center'
 require 'file'
 require 'folder'

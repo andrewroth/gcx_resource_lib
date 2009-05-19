@@ -1,11 +1,11 @@
 require "#{File.dirname(__FILE__)}/../init"
 
-describe 'FileOperator' do
+describe GcxResourceCenter do
 
   before do
     auth = Auth.new('studentseven7@gmail.com', 'student7!')
     @agent = auth.agent
-    @fo = FileOperator.new(@agent, :staging)
+    @gcx = GcxResourceCenter.new(@agent, :staging)
     create_test_file
   end
 
@@ -28,21 +28,14 @@ describe 'FileOperator' do
     # https://stage.mygcx.org/AndrewTest/screen/resourceCenter
 
     lambda {
-      @fo.list :community => 'AndrewTest'
+      @gcx.list :community => 'AndrewTest'
     }.should_not raise_error
   end
 
-  it "should upload a file" do
-    @fo.upload :community => 'AndrewTest',
-      :file => File.open('test.txt')
-    file = fo.list(:community => 'AndrewTest').find { |f|
-      f.title == 'test.txt'
-    }
-    file.should_not be_nil
-    file.destroy!
-  end
-
-  it "should get details on a file" do
+=begin
+# this should be an integration test
+#
+  it "should upload a file correctly, including setting the details" do
     @fo.upload :community => 'AndrewTest',
       :file => File.open('test.txt'),
       :title => 'title',
@@ -62,6 +55,7 @@ describe 'FileOperator' do
 
     file.destroy!
   end
+=end
 
   it "should correctly list a folder" do
     @agent.should_receive(:get).and_return(mock('page', :body => %|
