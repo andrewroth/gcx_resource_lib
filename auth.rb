@@ -4,10 +4,10 @@ module Gcx
     attr_reader :password
     attr_reader :agent
 
-    def initialize(username, password)
+    def initialize(agent, username, password)
       @username = username
       @password = password
-      @agent = WWW::Mechanize.new
+      @agent = agent
 
       @authenticated = connect!
       throw "Invalid username or password" unless authenticated?
@@ -27,7 +27,7 @@ module Gcx
       }
 
       cas_url = LOGIN_URL
-      page = agent.post(cas_url, form_params)
+      page = @agent.post(cas_url, form_params)
       result_query = page.uri.query
 
       # nil result means auth succeeded

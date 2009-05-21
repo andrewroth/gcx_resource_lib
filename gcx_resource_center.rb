@@ -1,9 +1,11 @@
 module Gcx
   class ResourceCenter
 
-    def initialize(agent, mode)
+    def initialize(username, password, mode = :production)
       @agent = agent
       @mode = mode
+      @agent = WWW::Mechanize.new
+      @auth = Auth.new(@agent, username, password)
     end
 
     # resource should be the url after the domain
