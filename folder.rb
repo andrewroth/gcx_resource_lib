@@ -4,11 +4,22 @@ class Gcx::ResourceCenter
 
     # node can be the resourceCenter node, in which case
     # child data is loaded, otherwise child data is lazy loaded
-    def initialize(parent, node, gcx)
+    # leave node and parent nil if you want to load the resourceCenter
+    # initial data here
+    def initialize(rc, parent = nil, node = nil)
       @parent = parent
+      @rc = rc
+
+      unless node
+        @community = rc.community
+        node = get_files_and_folders_xml.root
+      end
 
       if node.name == 'resourcecenter'
-        @node = (node/'folders').first
+        root_xml = node
+        @node = (root_xml/'folders').first
+        # load children later so that id is set first, since sub-files verify the parent id
+        # matches what's given in their xml
         load_children = true 
       else
         @node = node
@@ -17,11 +28,8 @@ class Gcx::ResourceCenter
       @id = @node[:id].to_i
       @label = @node[:label]
       @community = @node[:community]
-      @gcx = gcx
 
-      # load children last so that id is set, since sub-files verify the parent id
-      # matches what's given in their xml
-      load_children_from_xml(node) if load_children
+      load_children_from_xml(root_xml) if load_children
     end
 
     def files
@@ -46,10 +54,14 @@ class Gcx::ResourceCenter
 
     # sample url: https://stage.mygcx.org/AndrewTest/module/resourceCenter/get_files?sys_ts=1242592593314
     def load_children_remotely
+      load_children_from_xml get_files_and_folders_xml
+    end
+
+    def get_files_and_folders_xml
       url = "#{@community}/module/resourceCenter/get_files"
       url += "?id=#{@id}" if @id
-      page = @gcx.get url
-      load_children_from_xml Hpricot(page.body)
+      page = @rc.get url
+      Hpricot(page.body)
     end
 
     def load_children_from_xml(xml)
@@ -60,7 +72,7 @@ class Gcx::ResourceCenter
     # parse from xml
     def parse_list_response(xml)
       [ nodes_for(xml, 'files').collect{ |node| File.new(self, node) },
-        nodes_for(xml, 'folders').collect{ |node| Folder.new(nil, node, @gcx) } ]
+        nodes_for(xml, 'folders').collect{ |node| Folder.new(@rc, self, node) } ]
     end
 
     def nodes_for(xml, node_name)

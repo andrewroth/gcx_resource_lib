@@ -5,11 +5,11 @@ module Gcx
     before do
       @parent = mock('parent', :id => 3)
       @node = Hpricot(%|<node community="AndrewTest" id="6" label="News">|).root
-      @rc = mock('gcx')
+      @rc = mock('rc')
     end
 
     it "should store and extract attributes properly" do
-      @folder = ResourceCenter::Folder.new(@parent, @node, @rc)
+      @folder = ResourceCenter::Folder.new(@rc, @parent, @node)
 
       @folder.parent.should == @parent
       @folder.id.should == 6
@@ -41,9 +41,9 @@ module Gcx
 </resourceCenter>
 |
       root_folder = ResourceCenter::Folder.new(
+        @rc,
         nil, 
-        Hpricot(root_xml).root,
-        @rc
+        Hpricot(root_xml).root
       )
 
       root_folder.files.length.should == 1

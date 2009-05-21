@@ -23,7 +23,7 @@ module Gcx
 
     it "should auth when created" do
       Auth.should_receive(:new).and_return(mock('auth'))
-      rc = ResourceCenter.new('studentseven7@gmail.com', 'student7!')
+      rc = ResourceCenter.new('studentseven7@gmail.com', 'student7!', 'AndrewTest')
     end
 
 =begin
