@@ -1,0 +1,2 @@
+rc = Gcx::ResourceCenter.new('studentseven7@gmail.com', 'student7!', 'AndrewTest', :staging)
+rc.root.folders.collect &:label
