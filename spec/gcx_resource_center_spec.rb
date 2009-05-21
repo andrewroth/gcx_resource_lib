@@ -3,14 +3,11 @@ require "#{File.dirname(__FILE__)}/../init"
 module Gcx
   describe ResourceCenter do
 
-    before do
-      auth = Auth.new('studentseven7@gmail.com', 'student7!')
-      @agent = auth.agent
-      @rc = ResourceCenter.new(@agent, :staging)
+    before(:each) do
       create_test_file
     end
 
-    after do
+    after(:each) do
       delete_test_file
     end
 
@@ -22,6 +19,11 @@ module Gcx
 
     def delete_test_file
       File.delete 'test.txt'
+    end
+
+    it "should auth when created" do
+      Auth.should_receive(:new).and_return(mock('auth'))
+      rc = ResourceCenter.new('studentseven7@gmail.com', 'student7!')
     end
 
 =begin

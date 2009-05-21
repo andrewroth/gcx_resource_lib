@@ -2,7 +2,6 @@ module Gcx
   class ResourceCenter
 
     def initialize(username, password, mode = :production)
-      @agent = agent
       @mode = mode
       @agent = WWW::Mechanize.new
       @auth = Auth.new(@agent, username, password)
@@ -24,7 +23,7 @@ module Gcx
         throw 'construct_url requires a mode, one of :production or :staging'
       end
 
-    "#{base}/#{resource}"
+      "#{base}/#{resource}"
     end
   end
 end
