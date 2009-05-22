@@ -16,5 +16,23 @@ class Gcx::ResourceCenter
       folder_id = node[:folderid].to_i
       raise "folder id #{folder_id} and parent id #{@parent.id} do not match" unless folder_id == @parent.id
     end
+
+    def attributes
+      {
+        :id => @id,
+        :community => @community,
+        :name => @name,
+        :label => @label,
+        :size => @size,
+        :content_type => @content_type,
+        :uploader_guid => @uploader_guid
+      }
+    end
+    def to_s
+      "<#{self.class.name}:#{object_id} @label=#{@label} @id=#{@id}>"
+    end
+
+    def inspect() to_s end
+
   end
 end

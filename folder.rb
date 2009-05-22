@@ -46,6 +46,12 @@ class Gcx::ResourceCenter
       @files = @folders = nil
     end
 
+    def to_s
+      "<#{self.class.name}:#{object_id} @label=#{@label} @id=#{@id}>"
+    end
+
+    def inspect() to_s end
+
     protected
 
     def ensure_files_and_folders_loaded

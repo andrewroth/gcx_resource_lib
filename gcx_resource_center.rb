@@ -16,6 +16,12 @@ module Gcx
       @agent.get construct_url(@mode, resource)
     end
 
+    def to_s
+      "#<#{self.class.name}:#{object_id} @community=#{@community}>"
+    end
+
+    def inspect() to_s end
+
     protected
 
     def construct_url(mode, resource)
