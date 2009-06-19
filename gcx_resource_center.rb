@@ -13,6 +13,7 @@ module Gcx
 
     # resource should be the url after the domain
     def get(resource)
+      puts construct_url(@mode, resource)
       @agent.get construct_url(@mode, resource)
     end
 
